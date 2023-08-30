@@ -1,0 +1,40 @@
+name: build centos 8 stream rpm
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: docker.io/centos:7
+    steps:
+    - uses: actions/checkout@v2
+ 
+    - name: intall deps
+      run: |
+        yum install -y rpm-build rpmdevtools tree
+ 
+    - name: build-rpm
+      run: |
+        mkdir -p rpmbuild/SPECS
+        cd rpmbuild
+        spectool -D -g -R ./SPECS/ltfs.spec
+        cd SPECS
+        rpmbuild -bs ltfs.spec
+        rpmbuild --rebuild ../SRPMS/ltfs-2.4.4.0-10470.src.rpm
+        tree .
+
+
+    - name: Upload bin directory
+      uses: actions/upload-artifact@main
+      if: steps.build-rpm.outputs.status == 'success'
+      with:
+        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: openwrt/bin
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@main
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: ${{ env.FIRMWARE }}
