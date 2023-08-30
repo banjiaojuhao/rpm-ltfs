@@ -12,7 +12,7 @@ jobs:
  
     - name: intall deps
       run: |
-        yum install -y rpm-build rpmdevtools tree
+        yum install -y rpm-build rpmdevtools wget tree
  
     - name: build-rpm
       run: |
@@ -21,7 +21,7 @@ jobs:
         cp ltfs.spec rpmbuild/SPECS/
         cd rpmbuild
         # spectool -D -g -R ./SPECS/ltfs.spec
-        curl -o SOURCES/ltfs-2.4.4.0.tar.gz https://github.com/LinearTapeFileSystem/ltfs/archive/v2.4.4.0-10470/ltfs-2.4.4.0.tar.gz
+        wget -O SOURCES/ltfs-2.4.4.0.tar.gz https://github.com/LinearTapeFileSystem/ltfs/archive/v2.4.4.0-10470/ltfs-2.4.4.0.tar.gz
         cd SPECS
         rpmbuild -bs ltfs.spec
         rpmbuild --rebuild ../SRPMS/ltfs-2.4.4.0-10470.src.rpm
