@@ -1,6 +1,7 @@
 name: build centos 8 stream rpm
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -23,7 +24,7 @@ jobs:
         # spectool -D -g -R ./SPECS/ltfs.spec
         wget -O SOURCES/ltfs-2.4.4.0.tar.gz https://github.com/LinearTapeFileSystem/ltfs/archive/v2.4.4.0-10470/ltfs-2.4.4.0.tar.gz
         cd SPECS
-        yum-builddep ltfs.spec
+        yum-builddep -y ltfs.spec
         rpmbuild -ba ltfs.spec
         # rpmbuild --rebuild ../SRPMS/ltfs-2.4.4.0-10470.src.rpm
         tree .
