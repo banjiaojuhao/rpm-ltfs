@@ -14,7 +14,7 @@ jobs:
     - name: intall deps
       run: |
         yum -y update && yum -y upgrade
-        yum -y install automake autoconf libtool make icu libicu-devel libxml2-devel libuuid-devel fuse-devel net-snmp-devel git python3 wget
+        yum -y install automake autoconf libtool make icu libicu-devel libxml2-devel libuuid-devel fuse-devel net-snmp-devel git python3 wget rpm-build rpmdevtools
         alternatives --set python /usr/bin/python3
  
     - name: build-rpm
