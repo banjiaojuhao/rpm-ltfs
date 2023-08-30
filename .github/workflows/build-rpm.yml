@@ -17,6 +17,7 @@ jobs:
     - name: build-rpm
       run: |
         mkdir -p rpmbuild/SPECS
+        mkdir -p rpmbuild/SOURCES
         cp ltfs.spec rpmbuild/SPECS/
         cd rpmbuild
         spectool -D -g -R ./SPECS/ltfs.spec
