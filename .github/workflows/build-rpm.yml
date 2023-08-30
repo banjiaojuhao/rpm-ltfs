@@ -13,33 +13,19 @@ jobs:
  
     - name: intall deps
       run: |
-        yum install -y rpm-build rpmdevtools wget tree
+        yum install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools wget
  
     - name: build-rpm
       run: |
-        mkdir -p ~/rpmbuild/SPECS
-        mkdir -p ~/rpmbuild/SOURCES
+        rpmdev-setuptree
         cp ltfs.spec ~/rpmbuild/SPECS/
-        cd ~/rpmbuild
-        # spectool -D -g -R ./SPECS/ltfs.spec
-        wget -O SOURCES/ltfs-2.4.4.0.tar.gz https://github.com/LinearTapeFileSystem/ltfs/archive/v2.4.4.0-10470/ltfs-2.4.4.0.tar.gz
-        cd SPECS
-        yum-builddep -y ltfs.spec
-        rpmbuild -ba ltfs.spec
-        # rpmbuild --rebuild ../SRPMS/ltfs-2.4.4.0-10470.src.rpm
-        tree .
+        wget -O ~/rpmbuild/SOURCES/ltfs-2.4.4.0.tar.gz https://github.com/LinearTapeFileSystem/ltfs/archive/v2.4.4.0-10470/ltfs-2.4.4.0.tar.gz
+        yum-builddep -y ~/rpmbuild/SPECS/ltfs.spec
+        rpmbuild -ba ~/rpmbuild/SPECS/ltfs.spec
 
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
-      if: steps.build-rpm.outputs.status == 'success'
       with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin
-
-    - name: Upload firmware directory
-      uses: actions/upload-artifact@main
-      if: steps.organize.outputs.status == 'success' && !cancelled()
-      with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
+        name: ltfs-2.4.4.0-10470.x86_64.rpm
+        path: /github/home/rpmbuild/RPMS/x86_64/ltfs-2.4.4.0-10470.x86_64.rpm
