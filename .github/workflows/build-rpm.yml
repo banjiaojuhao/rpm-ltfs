@@ -16,10 +16,10 @@ jobs:
  
     - name: build-rpm
       run: |
-        mkdir -p rpmbuild/SPECS
-        mkdir -p rpmbuild/SOURCES
-        cp ltfs.spec rpmbuild/SPECS/
-        cd rpmbuild
+        mkdir -p ~/rpmbuild/SPECS
+        mkdir -p ~/rpmbuild/SOURCES
+        cp ltfs.spec ~/rpmbuild/SPECS/
+        cd ~/rpmbuild
         # spectool -D -g -R ./SPECS/ltfs.spec
         wget -O SOURCES/ltfs-2.4.4.0.tar.gz https://github.com/LinearTapeFileSystem/ltfs/archive/v2.4.4.0-10470/ltfs-2.4.4.0.tar.gz
         cd SPECS
