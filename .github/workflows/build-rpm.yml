@@ -13,7 +13,7 @@ jobs:
  
     - name: intall deps
       run: |
-        yum install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools wget
+        yum install -y rpm-devel rpmdevtools wget
  
     - name: build-rpm
       run: |
