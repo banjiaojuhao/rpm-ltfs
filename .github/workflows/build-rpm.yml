@@ -15,13 +15,18 @@ jobs:
       run: |
         yum -y update && yum -y upgrade
         yum -y install automake autoconf libtool make icu libicu-devel libxml2-devel libuuid-devel fuse-devel net-snmp-devel git python3 wget rpm-build rpmdevtools yum-utils
-        alternatives --set python /usr/bin/python3
  
     - name: build-rpm
       run: |
         rpmdev-setuptree
         cp ltfs.spec ~/rpmbuild/SPECS/
         wget -O ~/rpmbuild/SOURCES/ltfs-2.4.4.0.tar.gz https://github.com/LinearTapeFileSystem/ltfs/archive/v2.4.4.0-10470/ltfs-2.4.4.0.tar.gz
+        cd ~/rpmbuild/SOURCES/
+        tar -xzf ltfs-2.4.4.0.tar.gz
+        sed -i 's|#!/usr/bin/env python|#!/usr/bin/env python3|' ltfs-2.4.4.0-10470/src/utils/ltfs_ordered_copy
+        tar -czf ltfs-2.4.4.0.tar.gz ltfs-2.4.4.0-10470/
+        rm -rf ltfs-2.4.4.0-10470/
+        cd
         yum-builddep -y ~/rpmbuild/SPECS/ltfs.spec
         rpmbuild -ba ~/rpmbuild/SPECS/ltfs.spec
 
